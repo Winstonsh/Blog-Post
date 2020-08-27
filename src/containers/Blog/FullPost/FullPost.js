@@ -8,10 +8,11 @@ class FullPost extends Component {
         loadedPost: null
     }
     
-    componentDidUpdate() {
-        if(this.props.id) { //only get data when one post is clicked (onClick which retrieves the post ID)
-            if(!this.state.loadedPost || (this.state.loadedPost.id !== this.props.id)) { //if current ID is different from previous ID
-                axios.get("https://jsonplaceholder.typicode.com/posts/" + this.props.id)
+    componentDidMount() {
+        console.log(this.props.match)
+        if(this.props.match.params.id) { //only get data when one post is clicked (onClick which retrieves the post ID)
+            if(!this.state.loadedPost || (this.state.loadedPost.id !== this.props.match.params.id)) { //if current ID is different from previous ID
+                axios.get("https://jsonplaceholder.typicode.com/posts/" + this.props.match.params.id)
                     .then(response => {
                         this.setState({loadedPost: response.data})
                     });
@@ -20,7 +21,7 @@ class FullPost extends Component {
     }
 
     deletePostHandler = () => {
-        axios.delete("https://jsonplaceholder.typicode.com/posts/" + this.props.id)
+        axios.delete("https://jsonplaceholder.typicode.com/posts/" + this.props.match.params.id)
             .then(response => {
                 console.log(response);
             });
@@ -28,7 +29,7 @@ class FullPost extends Component {
 
     render () {
         let post = <p style={{textAlign:'center'}}>Please select a Post!</p>;
-        if(this.props.id) {
+        if(this.props.match.params.id) {
             post = <p style={{textAlign:'center'}}>Loading...</p>;
         }
 
