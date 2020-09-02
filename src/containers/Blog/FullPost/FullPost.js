@@ -10,8 +10,16 @@ class FullPost extends Component {
     
     componentDidMount() {
         console.log(this.props.match)
+        this.loadData()
+    }
+
+    componentDidUpdate() {
+        this.loadData()
+    }
+
+    loadData() {
         if(this.props.match.params.id) { //only get data when one post is clicked (onClick which retrieves the post ID)
-            if(!this.state.loadedPost || (this.state.loadedPost.id !== this.props.match.params.id)) { //if current ID is different from previous ID
+            if(!this.state.loadedPost || (this.state.loadedPost.id != this.props.match.params.id)) { //if current ID is different from previous ID
                 axios.get("https://jsonplaceholder.typicode.com/posts/" + this.props.match.params.id)
                     .then(response => {
                         this.setState({loadedPost: response.data})
