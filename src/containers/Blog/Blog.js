@@ -1,11 +1,12 @@
-import React, { Component } from 'react';
+import React, { Component, Suspense } from 'react';
 
 import { Route, NavLink, Switch, Redirect } from 'react-router-dom';
 
 import Posts from './Posts/Posts';
-import NewPost from './NewPost/NewPost';
 
 import './Blog.css';
+
+const NewPost = React.lazy(() => import('./NewPost/NewPost')); // lazy-loaded
 
 class Blog extends Component {
     state = {
@@ -23,7 +24,14 @@ class Blog extends Component {
                     </nav>
                 </header>
                 <Switch>
-                    {this.state.auth ? <Route path='/new-post' exact component={NewPost}/> : null /*routing guards*/}
+                    {this.state.auth ? 
+                            <Route path='/new-post' exact render={() => (
+                                <Suspense fallback={<div>Loading...</div>}>
+                                    <NewPost/>
+                                </Suspense>
+                            )}/>
+                    : null /*routing guards*/}
+
                     <Route path='/posts/' component={Posts}/>
                     <Redirect from='/' to='/posts/'/>
                 </Switch>
