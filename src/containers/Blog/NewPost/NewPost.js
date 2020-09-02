@@ -8,8 +8,8 @@ class NewPost extends Component {
     state = {
         title: '',
         content: '',
-        author: 'Max',
-        submitted: false
+        author: 'Max'
+        //submitted: false //part of alternative method to history.push on line 25
     }
 
     postDataHandler = () => {
@@ -22,19 +22,22 @@ class NewPost extends Component {
         axios.post("https://jsonplaceholder.typicode.com/posts", newPost)
             .then(response => {
                 console.log(response)
+                this.props.history.replace('/posts/');
+                //this.setState({submitted: true}); part of alternative method to history.push on line 25
             });
-            this.setState({submitted: true});
+           
     }
 
     render () {
-        let redirect = null;
-        if(this.state.submitted) {
-            redirect = <Redirect to='/posts/'/>;
-        };
+        /*alternative method to history.push on line 25
+         let redirect = null;
+         if(this.state.submitted) {
+             redirect = <Redirect to='/posts/'/>;
+         };*/
 
         return (
             <div className="NewPost">
-                {redirect}
+                {/*  {redirect} //part of alternative method to history.push on line 25 */}
                 <h1>Add a Post</h1>
                 <label>Title</label>
                 <input type="text" value={this.state.title} onChange={(event) => this.setState({title: event.target.value})} />
